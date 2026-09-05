@@ -87,7 +87,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         buttons = []
         for chat_id, sender_name, account_name, count in rows:
-            label = f"{sender_name} → {account_name} ({count})"
+            label = f"{sender_name} (ID: {chat_id}) → {account_name}"
             buttons.append([InlineKeyboardButton(label, callback_data=f"user_{chat_id}")])
         await query.message.reply_text("کاربرا:", reply_markup=InlineKeyboardMarkup(buttons))
 
@@ -103,7 +103,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not rows:
             await query.message.reply_text("پیامی پیدا نشد.")
             return
-        reply = f"💬 مکالمه با {rows[0][0]}:\n\n"
+        reply = f"💬 مکالمه با {rows[0][0]} (ID: {chat_id}):\n\n"
         for sender_name, direction, text, ts in rows:
             if direction == "in":
                 reply += f"👤 {sender_name} ({ts}):\n{text}\n\n"
