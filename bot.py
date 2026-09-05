@@ -12,7 +12,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, Cal
 BOT_TOKEN = "8676656976:AAEVRS_30kIEGnP_D3bGgzieYIbUq_R3DOU"
 ADMIN_ID = 5967757528
 AUTO_REPLY_TEXT = "سلام الان آنلاین نیستم آنلاین شدم جواب میدم ممنون از اینکه صبر می‌کنی ❤️"
-WEBAPP_URL = "https://YOUR-RAILWAY-DOMAIN.up.railway.app/webapp"
+WEBAPP_URL = "https://support-bot-production-c8c9.up.railway.app/webapp"
 
 conn = sqlite3.connect("messages.db", check_same_thread=False)
 cur = conn.cursor()
