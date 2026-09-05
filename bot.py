@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS messages (
     business_account_name TEXT,
     sender_name TEXT,
     sender_chat_id INTEGER,
+    direction TEXT,
     text TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )
@@ -36,8 +37,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         account_name = f"{conn_info.user.first_name or ''} {conn_info.user.last_name or ''}".strip()
 
         cur.execute(
-            "INSERT INTO messages (business_account_name, sender_name, sender_chat_id, text) VALUES (?, ?, ?, ?)",
-            (account_name, sender_name, bm.chat.id, bm.text or "")
+            "INSERT INTO messages (business_account_name, sender_name, sender_chat_id, direction, text) VALUES (?, ?, ?, ?, ?)",
+            (account_name, sender_name, bm.chat.id, "in", bm.text or "")
         )
         conn.commit()
 
@@ -46,6 +47,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=AUTO_REPLY_TEXT,
             business_connection_id=bm.business_connection_id
         )
+
+        cur.execute(
+            "INSERT INTO messages (business_account_name, sender_name, sender_chat_id, direction, text) VALUES (?, ?, ?, ?, ?)",
+            (account_name, sender_name, bm.chat.id, "out", AUTO_REPLY_TEXT)
+        )
+        conn.commit()
         return
 
     if update.message and update.effective_user.id == ADMIN_ID:
@@ -87,7 +94,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data.startswith("user_"):
         chat_id = int(query.data.replace("user_", ""))
         cur.execute("""
-            SELECT sender_name, text, created_at
+            SELECT sender_name, direction, text, created_at
             FROM messages
             WHERE sender_chat_id = ?
             ORDER BY id ASC
@@ -97,8 +104,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.message.reply_text("پیامی پیدا نشد.")
             return
         reply = f"💬 مکالمه با {rows[0][0]}:\n\n"
-        for sender, text, ts in rows:
-            reply += f"🕒 {ts}\n{text}\n\n"
+        for sender_name, direction, text, ts in rows:
+            if direction == "in":
+                reply += f"👤 {sender_name} ({ts}):\n{text}\n\n"
+            else:
+                reply += f"🤖 من ({ts}):\n{text}\n\n"
         await query.message.reply_text(reply)
 
     elif query.data == "edit_reply":
