@@ -311,4 +311,4 @@ if __name__ == "__main__":
     telegram_app.add_handler(CommandHandler("setreply", setreply_cmd))
     telegram_app.add_handler(CallbackQueryHandler(button_handler))
     telegram_app.add_handler(MessageHandler(filters.ALL, handle_message))
-    telegram_app.run_polling(allowed_updates=Update.ALL_TYPES)
+    telegram_app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)
