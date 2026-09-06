@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify, Response
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, CallbackQueryHandler, ContextTypes, filters
 
-BOT_TOKEN = "8676656976:AAEVRS_30kIEGnP_D3bGgzieYIbUq_R3DOU"
+BOT_TOKEN = "8676656976:AAHSxTVOlapIL0l1Sz--HidQT-SOZaNI-_U"
 ADMIN_ID = 5967757528
 AUTO_REPLY_TEXT = "سلام الان آنلاین نیستم آنلاین شدم جواب میدم ممنون از اینکه صبر می‌کنی ❤️"
 WEBAPP_URL = "https://support-bot-production-c8c9.up.railway.app/webapp"
